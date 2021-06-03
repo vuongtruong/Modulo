@@ -38,7 +38,7 @@ abstract class BaseActivity< V : BaseViewModel> : AppCompatActivity() {
         setupUI()
         initView()
         setupErrorWatcher()
-        setupObserver()
+//        setupObserver()
     }
 
 //    private fun performDataBinding() {
