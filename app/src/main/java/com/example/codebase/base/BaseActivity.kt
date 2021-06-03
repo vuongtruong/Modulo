@@ -12,16 +12,16 @@ import com.example.codebase.R
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 
-abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatActivity() {
+abstract class BaseActivity< V : BaseViewModel> : AppCompatActivity() {
 
     var moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
     @get:LayoutRes
     abstract val layoutId: Int
 
-    abstract val bindingVariable: Int
-    var viewDataBinding: T? = null
-        private set
+//    abstract val bindingVariable: Int
+//    var viewDataBinding: T? = null
+//        private set
 
     /**
      * Get ViewModel with this activity
@@ -32,19 +32,21 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(layoutId)
         viewModel.onViewCreated()
-        performDataBinding()
+        //performDataBinding()
+        setupUI()
         initView()
         setupErrorWatcher()
         setupObserver()
     }
 
-    private fun performDataBinding() {
-        viewDataBinding = DataBindingUtil.setContentView(this, layoutId)
-        viewDataBinding!!.lifecycleOwner = this
-        viewDataBinding!!.setVariable(bindingVariable, viewModel)
-        viewDataBinding!!.executePendingBindings()
-    }
+//    private fun performDataBinding() {
+//        viewDataBinding = DataBindingUtil.setContentView(this, layoutId)
+//        viewDataBinding!!.lifecycleOwner = this
+//        viewDataBinding!!.setVariable(bindingVariable, viewModel)
+//        viewDataBinding!!.executePendingBindings()
+//    }
 
     /**
      * Init default view
@@ -55,6 +57,8 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
      * Setup all Observer
      */
     abstract fun setupObserver()
+
+    abstract fun setupUI()
 
     private fun setupErrorWatcher() {
         viewModel.errorDialogWatcher.observe(this, Observer {
